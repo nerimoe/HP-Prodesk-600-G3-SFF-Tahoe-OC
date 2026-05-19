@@ -97,9 +97,9 @@
 			<key>VoodooHDAEnableHalfVolumeFix</key>
 			<false/>
 			<key>VoodooHDAEnableMuteFix</key>
-			<false/>
+			<true/>
 			<key>VoodooHDAEnableVolumeChangeFix</key>
-			<false/>
+			<true/>
 			<key>VoodooHDAVerboseLevel</key>
 			<integer>2</integer>
 		</dict>

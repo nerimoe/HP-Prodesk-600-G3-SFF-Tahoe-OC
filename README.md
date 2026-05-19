@@ -61,6 +61,8 @@ Config: 0x92170150
 
 This places the internal speaker into its own association so VoodooHDA can expose a working analog speaker output.
 
+The patched kext also enables `VoodooHDAEnableVolumeChangeFix` and `VoodooHDAEnableMuteFix`. On this codec, macOS' normal volume slider can move without changing the real analog output level unless VoodooHDA mirrors that change to the PCM mixer.
+
 ## Installation Notes
 
 - Copy `EFI` to your EFI partition.
@@ -136,6 +138,8 @@ Config: 0x92170150
 ```
 
 这样可以把内置小扬声器放进独立 association，让 VoodooHDA 正常暴露可用的模拟扬声器输出。
+
+修补版 kext 同时启用了 `VoodooHDAEnableVolumeChangeFix` 和 `VoodooHDAEnableMuteFix`。在这颗声卡上，macOS 系统音量条可能会正常移动，但不会真正改变模拟输出音量；开启该修复后，VoodooHDA 会把系统音量变化同步到 PCM mixer。
 
 ## 安装提示
 
