@@ -31,11 +31,18 @@ Replace these fields in `EFI/OC/config.plist`:
 ## Notes
 
 - No graphics `device-id` injection is used. Injecting a graphics device ID can remove supersampled HiDPI modes; for example, on a 4K display, 2560x1440 HiDPI may disappear and only 1080p HiDPI remains.
+- The onboard VGA port on this machine is treated as a digital output path behind the Intel framebuffer rather than a legacy analog VGA device. The EFI injects only the desktop HD 630 `AAPL,ig-platform-id` (`00001259`) and `force-online` for IGPU output detection, while leaving the native graphics `device-id` untouched.
 - SMBIOS is set to `iMac20,1` for Tahoe compatibility. Other SMBIOS models may not be supported by Tahoe.
 - Disable Intel Optane optimization for the M.2 slot in BIOS. Otherwise the M.2 NVMe drive may not be detected.
 - Set DVMT pre-allocated memory to 64 MB in BIOS.
 - USB mapping has already been customized for this machine.
 - Tahoe removed AppleHDA, so the usual AppleALC path for analog audio may require restoring or patching system audio components and reducing SIP more aggressively. This EFI instead uses VoodooHDA for analog audio, together with a small CX20632 pin patch for the built-in speaker, so audio can work without taking the full AppleALC + system patch route.
+
+## Graphics
+
+The EFI uses the native HD 630 device ID and does not spoof the graphics device. For the HP ProDesk 600 G3 SFF display outputs, `AAPL,ig-platform-id` is set to `00001259` so macOS uses a desktop Kaby Lake framebuffer layout, and `force-online` is enabled to help bridged/offline outputs come up during detection.
+
+After changing graphics properties, reset NVRAM once from OpenCore. If a display path still does not work, the next thing to try is a more specific connector patch for that port rather than adding a graphics `device-id`.
 
 ## Audio
 
@@ -109,11 +116,18 @@ Audio/VoodooHDA-CX20632-speakerfix.kext
 ## 注意事项
 
 - 没有对核显进行 `device-id` 注入。注入显卡 device-id 可能会导致超采样 HiDPI 分辨率丢失，例如使用 4K 屏时可能只剩 1080p HiDPI，而没有 2560x1440 HiDPI。
+- 这台机器的板载 VGA 接口按 Intel framebuffer 后面的数字输出路径处理，而不是传统模拟 VGA 设备。EFI 只为核显注入桌面 HD 630 的 `AAPL,ig-platform-id` (`00001259`) 和用于输出检测的 `force-online`，不修改原生显卡 `device-id`。
 - SMBIOS 使用 `iMac20,1` 以适配 Tahoe。其他 SMBIOS 机型可能不被 Tahoe 支持。
 - BIOS 中需要关闭 M.2 接口的 Intel Optane 傲腾优化，否则可能无法识别 M.2 NVMe 硬盘。
 - BIOS 中需要将 DVMT 预分配显存调整为 64 MB。
 - USB 映射已经针对这台机器定制完成。
 - Tahoe 移除了 AppleHDA，因此常规 AppleALC 模拟音频方案可能需要恢复或修补系统音频组件，并更大幅度地降低 SIP。这个 EFI 选择使用 VoodooHDA 处理模拟音频，并针对 CX20632 内置小扬声器加入了一个很小的 pin 修补，从而避免走完整的 AppleALC + 系统补丁路线。
+
+## 核显说明
+
+这个 EFI 保留 HD 630 的原生 device ID，不做显卡设备 ID 仿冒。针对 HP ProDesk 600 G3 SFF 的显示输出，`AAPL,ig-platform-id` 设置为 `00001259`，让 macOS 使用桌面 Kaby Lake framebuffer 布局，并启用 `force-online` 辅助桥接或离线输出在检测时上线。
+
+修改核显属性后，建议在 OpenCore 中重置一次 NVRAM。如果某一路显示输出仍然不可用，下一步应该针对该接口做更具体的 connector patch，而不是添加显卡 `device-id` 注入。
 
 ## 音频说明
 
