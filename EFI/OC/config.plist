@@ -189,7 +189,13 @@
                 <key>PciRoot(0x0)/Pci(0x2,0x0)</key>
                 <dict>
                     <key>AAPL,ig-platform-id</key>
-                    <data>AAASWQ==</data>
+                    <data>AAAWWQ==</data>
+                    <key>framebuffer-patch-enable</key>
+                    <data>AQAAAA==</data>
+                    <key>framebuffer-con2-enable</key>
+                    <data>AQAAAA==</data>
+                    <key>framebuffer-con2-alldata</key>
+                    <data>AwYKAAAEAACHAQAA</data>
                     <key>force-online</key>
                     <data>AQAAAA==</data>
                 </dict>
